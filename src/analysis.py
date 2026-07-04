@@ -21,10 +21,10 @@
 
 def question2():
     # pelo que entendi, temos que alterar o discount ou noise
-    # acho que temos que aumentar o discount e diminuir o noise, para que o agente tenha 
+    # acho que temos que aumentar o discount ou diminuir o noise, para que o agente tenha 
     # mais certeza de que está indo para o estado desejado.
     answerDiscount = 0.9 
-    answerNoise = 0.2
+    answerNoise = 0.001
     return answerDiscount, answerNoise
 
 if __name__ == '__main__':
