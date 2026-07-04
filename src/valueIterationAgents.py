@@ -42,8 +42,22 @@ class ValueIterationAgent(ValueEstimationAgent):
         self.iterations = iterations
         self.values = util.Counter()  # A Counter is a dict with default 0
 
-        # Write value iteration code here
-        "*** YOUR CODE HERE ***"
+        # aqui estou repetindo para cada iteração
+        # calculando um novo counter de valores para cada estado, e no final da iteração,
+        # atualizando o counter de valores do agente com os novos valores calculados.
+        for i in range(iterations):
+            new_values = util.Counter()
+            for state in mdp.getStates():
+                if mdp.isTerminal(state):
+                    new_values[state] = 0
+                else:
+                    action_values = []
+                    for action in mdp.getPossibleActions(state):
+                        q_value = self.computeQValueFromValues(state, action)
+                        action_values.append(q_value)
+                    new_values[state] = max(action_values)
+            self.values = new_values
+
 
 
     def getValue(self, state):
@@ -57,8 +71,13 @@ class ValueIterationAgent(ValueEstimationAgent):
           Compute the Q-value of action in state from the
           value function stored in self.values.
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # aqui para cada estado, estou calculando o valor Q para cada ação possível
+        # somando a probabilidade de transição multiplicada pelo valor do próximo estado 
+        # e o desconto aplicado ao valor do próximo estado.
+        q_value = 0
+        for next_state, prob in self.mdp.getTransitionStatesAndProbs(state, action):
+            q_value += prob * (self.mdp.getReward(state, action, next_state) + self.discount * self.values[next_state])
+        return q_value
 
     def computeActionFromValues(self, state):
         """
@@ -69,8 +88,16 @@ class ValueIterationAgent(ValueEstimationAgent):
           there are no legal actions, which is the case at the
           terminal state, you should return None.
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # se for um estado terminal retornar none, caso contrário, calcular 
+        # o valor Q para cada ação possível e retornar a ação com o maior valor Q.
+        if self.mdp.isTerminal(state):
+            return None
+        else:
+            q_values = {}
+            for action in self.mdp.getPossibleActions(state):
+                q_values[action] = self.computeQValueFromValues(state, action)
+            best_action = max(q_values, key=q_values.get)
+            return best_action
 
     def getPolicy(self, state):
         return self.computeActionFromValues(state)

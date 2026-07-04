@@ -20,7 +20,10 @@
 # value iteration.
 
 def question2():
-    answerDiscount = 0.9
+    # pelo que entendi, temos que alterar o discount ou noise
+    # acho que temos que aumentar o discount e diminuir o noise, para que o agente tenha 
+    # mais certeza de que está indo para o estado desejado.
+    answerDiscount = 0.9 
     answerNoise = 0.2
     return answerDiscount, answerNoise
 
